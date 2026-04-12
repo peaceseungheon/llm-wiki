@@ -1,0 +1,9 @@
+{
+  "userIgnoreFilters": [
+    "docs/",
+    "sources/",
+    ".git"
+  ],
+  "newFileLocation": "folder",
+  "newFileFolderPath": "wiki"
+}
