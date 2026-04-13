@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}LLM Wiki{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div id="top-bar">
+    <a href="/" id="site-title">&#128214; LLM Wiki</a>
+    <span id="site-subtitle">개인 지식 컴파일</span>
+    <form id="search-form" action="/search" method="get">
+      <input type="text" name="q" id="search-input"
+             placeholder="페이지 검색..."
+             value="{{ request.args.get('q', '') }}">
+    </form>
+  </div>
+
+  <div id="layout">
+    <nav id="sidebar">
+      {% for domain, pages in sidebar.items() %}
+      <div class="sidebar-domain">
+        <div class="sidebar-domain-title">&#128193; {{ domain }}</div>
+        {% if pages %}
+          {% for page_slug in pages %}
+          <a href="/wiki/{{ page_slug }}"
+             class="sidebar-link {% if page_slug == current_slug %}active{% endif %}">
+            &#xB7; {{ page_slug }}
+          </a>
+          {% endfor %}
+        {% else %}
+          <span class="sidebar-empty">페이지 없음</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </nav>
+
+    <main id="content">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>
