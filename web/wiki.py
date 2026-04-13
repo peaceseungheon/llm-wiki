@@ -1,6 +1,8 @@
 import os
 import re
 import glob
+import frontmatter
+import markdown as md_lib
 
 WIKI_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 WIKI_DIR = os.path.join(WIKI_ROOT, 'wiki')
@@ -26,3 +28,58 @@ def preprocess_wikilinks(content: str) -> str:
         return f'<span class="broken-link">{display_text}</span>'
 
     return re.sub(r'\[\[([^\]]+)\]\]', replace, content)
+
+
+def parse_page(path: str) -> dict:
+    """Parse a wiki page file into a dict with title, tags, updated, sources, body (HTML), toc (HTML)."""
+    post = frontmatter.load(path)
+    processed = preprocess_wikilinks(post.content)
+    converter = md_lib.Markdown(extensions=['toc', 'fenced_code', 'tables'])
+    body = converter.convert(processed)
+    return {
+        'title': post.get('title', os.path.basename(path).replace('.md', '')),
+        'tags': post.get('tags', []),
+        'updated': str(post.get('updated', '')),
+        'sources': post.get('sources', []),
+        'body': body,
+        'toc': converter.toc,
+    }
+
+
+def build_backlink_index() -> dict[str, list[str]]:
+    """Scan all wiki pages and return {target_slug: [linking_slugs]}."""
+    index: dict[str, list[str]] = {}
+    for path in glob.glob(os.path.join(WIKI_DIR, '**', '*.md'), recursive=True):
+        slug = os.path.basename(path).replace('.md', '')
+        if slug == '.gitkeep':
+            continue
+        try:
+            post = frontmatter.load(path)
+            for match in re.finditer(r'\[\[([^\]]+)\]\]', post.content):
+                # Handle pipe alias: [[Target|Alias]] → use Target for slug
+                raw = match.group(1)
+                link_target = raw.split('|', 1)[0].strip()
+                target = link_target.lower().replace(' ', '-')
+                index.setdefault(target, [])
+                if slug not in index[target]:
+                    index[target].append(slug)
+        except Exception:
+            pass
+    return index
+
+
+def get_sidebar_data() -> dict[str, list[str]]:
+    """Return {domain: [slugs]} for all wiki domains, in fixed display order."""
+    domains = ['programming', 'ai', 'politics', '_concepts']
+    result: dict[str, list[str]] = {}
+    for domain in domains:
+        domain_dir = os.path.join(WIKI_DIR, domain)
+        if os.path.isdir(domain_dir):
+            slugs = [
+                os.path.basename(f).replace('.md', '')
+                for f in sorted(glob.glob(os.path.join(domain_dir, '*.md')))
+            ]
+            result[domain] = [s for s in slugs if s != '.gitkeep']
+        else:
+            result[domain] = []
+    return result
