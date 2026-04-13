@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}검색: {{ query }} — LLM Wiki{% endblock %}
+
+{% block content %}
+<div id="page-header">
+  <h1>검색</h1>
+</div>
+
+{% if query %}
+  {% if results %}
+  <p class="search-count">{{ results | length }}개 결과: "{{ query }}"</p>
+  {% for r in results %}
+  <div class="search-result">
+    <a href="/wiki/{{ r.slug }}" class="result-title">{{ r.title }}</a>
+    <p class="result-snippet">{{ r.snippet }}</p>
+  </div>
+  {% endfor %}
+  {% else %}
+  <p class="search-empty">"{{ query }}"에 대한 결과가 없습니다.</p>
+  {% endif %}
+{% else %}
+  <p class="search-empty">검색어를 입력하세요.</p>
+{% endif %}
+{% endblock %}

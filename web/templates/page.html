@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ page.title }} — LLM Wiki{% endblock %}
+
+{% block content %}
+<div id="page-header">
+  <h1>{{ page.title }}</h1>
+  <div id="page-meta">
+    {% for tag in page.tags %}
+    <span class="tag">{{ tag }}</span>
+    {% endfor %}
+    {% if page.updated %}
+    <span class="updated">업데이트: {{ page.updated }}</span>
+    {% endif %}
+  </div>
+</div>
+
+{% if page.toc %}
+<div id="toc">
+  <div id="toc-title">목차</div>
+  {{ page.toc | safe }}
+</div>
+{% endif %}
+
+<div id="body">
+  {{ page.body | safe }}
+</div>
+
+<div id="backlinks">
+  <div class="backlinks-title">&#8592; 이 페이지를 링크한 페이지</div>
+  {% if backlinks %}
+    {% for bl in backlinks %}
+    <a href="/wiki/{{ bl }}" class="backlink-item">{{ bl }}</a>
+    {% endfor %}
+  {% else %}
+    <span class="backlinks-empty">아직 이 페이지를 링크한 페이지가 없습니다.</span>
+  {% endif %}
+</div>
+
+{% if page.sources %}
+<div id="sources">
+  <div class="sources-title">출처</div>
+  {% for src in page.sources %}
+  <div><a href="{{ src }}" target="_blank" rel="noopener">{{ src }}</a></div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
