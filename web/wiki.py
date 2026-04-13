@@ -32,14 +32,17 @@ def preprocess_wikilinks(content: str) -> str:
 
 def parse_page(path: str) -> dict:
     """Parse a wiki page file into a dict with title, tags, updated, sources, body (HTML), toc (HTML)."""
-    post = frontmatter.load(path)
+    try:
+        post = frontmatter.load(path)
+    except Exception as exc:
+        raise ValueError(f"Failed to parse frontmatter in {path}: {exc}") from exc
     processed = preprocess_wikilinks(post.content)
     converter = md_lib.Markdown(extensions=['toc', 'fenced_code', 'tables'])
     body = converter.convert(processed)
     return {
         'title': post.get('title', os.path.basename(path).replace('.md', '')),
         'tags': post.get('tags', []),
-        'updated': str(post.get('updated', '')),
+        'updated': post.get('updated', None),
         'sources': post.get('sources', []),
         'body': body,
         'toc': converter.toc,
