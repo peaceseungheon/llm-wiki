@@ -32,7 +32,7 @@ def test_preprocess_wikilinks_existing(wiki_dir, monkeypatch):
     monkeypatch.setattr(wiki, 'WIKI_DIR', str(wiki_dir / 'wiki'))
     text = 'See [[python-3-13]] for details.'
     result = wiki.preprocess_wikilinks(text)
-    assert '<a href="/wiki/python-3-13">' in result or '[python-3-13](/wiki/python-3-13)' in result
+    assert '[python-3-13](/wiki/python-3-13)' in result
 
 
 def test_preprocess_wikilinks_broken(wiki_dir, monkeypatch):
@@ -41,3 +41,10 @@ def test_preprocess_wikilinks_broken(wiki_dir, monkeypatch):
     result = wiki.preprocess_wikilinks(text)
     assert 'broken-link' in result
     assert 'nonexistent-page' in result
+
+
+def test_preprocess_wikilinks_pipe_alias(wiki_dir, monkeypatch):
+    monkeypatch.setattr(wiki, 'WIKI_DIR', str(wiki_dir / 'wiki'))
+    text = 'See [[python-3-13|Python]] for details.'
+    result = wiki.preprocess_wikilinks(text)
+    assert '[Python](/wiki/python-3-13)' in result
