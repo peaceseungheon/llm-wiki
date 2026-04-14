@@ -1,5 +1,7 @@
 import os
 import sys
+import logging
+import re
 
 # Ensure web/ is on the path when run as `python web/server.py` from project root
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -7,6 +9,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from flask import Flask, render_template, abort, request
 import wiki as wiki_module
 import search as search_module
+
+logger = logging.getLogger(__name__)
+
+_SLUG_RE = re.compile(r'^[a-z0-9][a-z0-9\-]*$')
 
 WIKI_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -17,7 +23,8 @@ try:
     backlinks = wiki_module.build_backlink_index()
     search_index = search_module.build_search_index()
     sidebar = wiki_module.get_sidebar_data()
-except Exception:
+except Exception as exc:
+    logger.warning("Failed to build indexes on startup: %s", exc)
     backlinks = {}
     search_index = {}
     sidebar = {}
@@ -35,6 +42,8 @@ def home():
 
 @app.route('/wiki/<slug>')
 def wiki_page(slug):
+    if not _SLUG_RE.match(slug):
+        abort(404)
     path = wiki_module.find_slug_path(slug)
     if not path:
         abort(404)
