@@ -89,7 +89,8 @@ def test_get_sidebar_data_lists_pages(wiki_dir, monkeypatch):
     monkeypatch.setattr(wiki, 'WIKI_DIR', str(wiki_dir / 'wiki'))
     sidebar = wiki.get_sidebar_data()
     assert 'programming' in sidebar
-    assert 'python-3-13' in sidebar['programming']
+    slugs = [p['slug'] for p in sidebar['programming']]
+    assert 'python-3-13' in slugs
 
 
 def test_get_sidebar_data_empty_domain(wiki_dir, monkeypatch):

@@ -26,7 +26,7 @@ try:
 except Exception as exc:
     logger.warning("Failed to build indexes on startup: %s", exc)
     backlinks = {}
-    search_index = {}
+    search_index = []
     sidebar = {}
 
 

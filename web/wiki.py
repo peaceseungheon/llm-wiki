@@ -45,7 +45,7 @@ def parse_page(path: str) -> dict:
         'updated': post.get('updated', None),
         'sources': post.get('sources', []),
         'body': body,
-        'toc': converter.toc,
+        'toc': converter.toc if '<li>' in converter.toc else '',
     }
 
 
@@ -71,18 +71,25 @@ def build_backlink_index() -> dict[str, list[str]]:
     return index
 
 
-def get_sidebar_data() -> dict[str, list[str]]:
-    """Return {domain: [slugs]} for all wiki domains, in fixed display order."""
+def get_sidebar_data() -> dict[str, list[dict]]:
+    """Return {domain: [{'slug': slug, 'title': title}]} for all wiki domains."""
     domains = ['programming', 'ai', 'politics', '_concepts']
-    result: dict[str, list[str]] = {}
+    result: dict[str, list[dict]] = {}
     for domain in domains:
         domain_dir = os.path.join(WIKI_DIR, domain)
         if os.path.isdir(domain_dir):
-            slugs = [
-                os.path.basename(f).replace('.md', '')
-                for f in sorted(glob.glob(os.path.join(domain_dir, '*.md')))
-            ]
-            result[domain] = [s for s in slugs if s != '.gitkeep']
+            pages = []
+            for f in sorted(glob.glob(os.path.join(domain_dir, '*.md'))):
+                slug = os.path.basename(f).replace('.md', '')
+                if slug == '.gitkeep':
+                    continue
+                try:
+                    post = frontmatter.load(f)
+                    title = post.get('title', slug)
+                except Exception:
+                    title = slug
+                pages.append({'slug': slug, 'title': title})
+            result[domain] = pages
         else:
             result[domain] = []
     return result
