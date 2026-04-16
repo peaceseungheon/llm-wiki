@@ -9,3 +9,5 @@
 ## [2026-04-13] ingest | 새 페이지 2개 생성: wiki/programming/python-3-13.md (Python 3.13 새 기능), wiki/politics/trump-hormuz-blockade-2026.md (트럼프 호르무즈 해협 봉쇄 선언)
 
 ## [2026-04-13] ingest | 새 페이지 1개 생성: wiki/programming/artemis-ii-fault-tolerant-computer.md (NASA Artemis II 오리온 캡슐 8중 CPU 내결함성 컴퓨팅 아키텍처)
+
+## [2026-04-16] ingest | 새 페이지 2개 생성: wiki/ai/java-vs-python-agent-frameworks.md (Java Embabel vs Python LangGraph 에이전트 패턴 비교), wiki/programming/compiler-writing-intro.md (컴파일러 작성 입문 — Crenshaw 시리즈 & Nanopass 논문)

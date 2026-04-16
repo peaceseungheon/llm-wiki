@@ -1,0 +1,42 @@
+---
+title: "Want to Write a Compiler? Just Read These Two Papers."
+source: "https://prog21.dadgum.com/30.html"
+author:
+published:
+created: 2026-04-16
+description:
+tags:
+  - "clippings"
+url: "https://prog21.dadgum.com/30.html"
+clipped: "2026-04-16T11:15:10+09:00"
+---
+[programming in the  
+twenty-first century](https://prog21.dadgum.com/)
+
+It's not about technology for its own sake. It's about being able to implement your ideas.
+
+Imagine you don't know *anything* about programming, and you want learn how to do it. You take a look at Amazon.com, and there's a highly recommended set of books by Knute or something with a promising title, *The Art of Computer Programming*, so you buy them. Now imagine that it's more than just a poor choice, but that **all** the books on programming are at written at that level.
+
+That's the situation with books about writing compilers.
+
+It's not that they're bad books, they're just too broadly scoped, and the authors present so much information that it's hard to know where to begin. Some books are better than others, but there are still the thick chapters about converting regular expressions into executable state machines and different types of grammars and so on. After slogging through it all you will have undoubtedly expanded your knowledge, but you're no closer to actually writing a working compiler.
+
+Not surprisingly, the opaqueness of these books has led to the myth that compilers are hard to write.
+
+The best source for breaking this myth is Jack Crenshaw's series, [Let's Build a Compiler!](http://compilers.iecc.com/crenshaw/), which started in 1988. This is one of those gems of technical writing where what's assumed to be a complex topic ends up being suitable for a first year programming class. He focuses on compilers of the Turbo Pascal class: single pass, parsing and code generation are intermingled, and only the most basic of optimizations are applied to the resulting code. The original tutorials used Pascal as the implementation language, but there's a C version out there, too. If you're truly adventurous, Marcel Hendrix has done a [Forth translation](http://home.iae.nl/users/mhx/crenshaw/tiny.html) (and as Forth is an interactive language, it's easier to experiment with and understand than the C or Pascal sources).
+
+As good as it is, Crenshaw's series has one major omission: there's no internal representation of the program at all. That is, no abstract syntax tree. It is indeed possible to bypass this step if you're willing to give up flexibility, but the main reason it's not in the tutorials is because manipulating trees in Pascal is out of sync with the simplicity of the rest of the code he presents. If you're working in a higher level language--Python, Ruby, Erlang, Haskell, Lisp--then this worry goes away. It's trivially easy to create and manipulate tree-like representations of data. Indeed, this is what Lisp, Erlang, and Haskell were designed for.
+
+That brings me to [A Nanopass Framework for Compiler Education](http://www.cs.indiana.edu/~dyb/pubs/nano-jfp.pdf) \[PDF\] by Sarkar, Waddell, and Dybvig. The details of this paper aren't quite as important as the general concept: a compiler is nothing more than a series of transformations of the internal representation of a program. The authors promote using **dozens or hundreds of compiler passes**, each being as simple as possible. Don't combine transformations; keep them separate. The framework mentioned in the title is a way of specifying the inputs and outputs for each pass. The code is in Scheme, which is dynamically typed, so data is validated at runtime.
+
+After writing a compiler or two, then go ahead and plunk down the cash for the infamous [Dragon Book](http://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools) or one of the alternatives. Maybe. Or you might not need them at all.
+
+[permalink](https://prog21.dadgum.com/30.html) *June 29, 2008*
+
+## previously
+
+- [A Spellchecker Used to Be a Major Feat of Software Engineering](https://prog21.dadgum.com/29.html)
+- [Coding as Performance](https://prog21.dadgum.com/28.html)
+- [Don't Be Afraid of Special Cases](https://prog21.dadgum.com/27.html)
+- [Purely Functional Retrogames, Part 4](https://prog21.dadgum.com/26.html)
+- [Purely Functional Retrogames, Part 3](https://prog21.dadgum.com/25.html)
