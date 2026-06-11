@@ -97,3 +97,28 @@ def test_get_sidebar_data_empty_domain(wiki_dir, monkeypatch):
     monkeypatch.setattr(wiki, 'WIKI_DIR', str(wiki_dir / 'wiki'))
     sidebar = wiki.get_sidebar_data()
     assert sidebar['ai'] == []
+
+
+def test_get_sidebar_data_discovers_new_domain(wiki_dir, monkeypatch):
+    """Domains are discovered from the filesystem, not hardcoded."""
+    dev = wiki_dir / 'wiki' / 'dev'
+    dev.mkdir()
+    (dev / 'spring-core.md').write_text(
+        '---\ntitle: "Spring Core"\ntags: [dev]\nupdated: 2026-06-11\nsources: []\n---\n\nIoC.',
+        encoding='utf-8',
+    )
+    monkeypatch.setattr(wiki, 'WIKI_DIR', str(wiki_dir / 'wiki'))
+    sidebar = wiki.get_sidebar_data()
+    assert 'dev' in sidebar
+    assert [p['slug'] for p in sidebar['dev']] == ['spring-core']
+
+
+def test_get_sidebar_data_underscore_domains_sort_last(wiki_dir, monkeypatch):
+    """_concepts must appear after regular domains."""
+    concepts = wiki_dir / 'wiki' / '_concepts'
+    concepts.mkdir()
+    monkeypatch.setattr(wiki, 'WIKI_DIR', str(wiki_dir / 'wiki'))
+    sidebar = wiki.get_sidebar_data()
+    keys = list(sidebar.keys())
+    assert keys[-1] == '_concepts'
+    assert keys == sorted(keys, key=lambda d: (d.startswith('_'), d))

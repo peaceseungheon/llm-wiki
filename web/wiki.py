@@ -72,24 +72,29 @@ def build_backlink_index() -> dict[str, list[str]]:
 
 
 def get_sidebar_data() -> dict[str, list[dict]]:
-    """Return {domain: [{'slug': slug, 'title': title}]} for all wiki domains."""
-    domains = ['programming', 'ai', 'politics', '_concepts']
+    """Return {domain: [{'slug': slug, 'title': title}]} for all wiki domains.
+
+    Domains are discovered from wiki/ subdirectories; underscore-prefixed
+    domains (e.g. _concepts) sort last."""
+    if not os.path.isdir(WIKI_DIR):
+        return {}
+    domains = sorted(
+        (d for d in os.listdir(WIKI_DIR)
+         if os.path.isdir(os.path.join(WIKI_DIR, d))),
+        key=lambda d: (d.startswith('_'), d),
+    )
     result: dict[str, list[dict]] = {}
     for domain in domains:
-        domain_dir = os.path.join(WIKI_DIR, domain)
-        if os.path.isdir(domain_dir):
-            pages = []
-            for f in sorted(glob.glob(os.path.join(domain_dir, '*.md'))):
-                slug = os.path.basename(f).replace('.md', '')
-                if slug == '.gitkeep':
-                    continue
-                try:
-                    post = frontmatter.load(f)
-                    title = post.get('title', slug)
-                except Exception:
-                    title = slug
-                pages.append({'slug': slug, 'title': title})
-            result[domain] = pages
-        else:
-            result[domain] = []
+        pages = []
+        for f in sorted(glob.glob(os.path.join(WIKI_DIR, domain, '*.md'))):
+            slug = os.path.basename(f).replace('.md', '')
+            if slug == '.gitkeep':
+                continue
+            try:
+                post = frontmatter.load(f)
+                title = post.get('title', slug)
+            except Exception:
+                title = slug
+            pages.append({'slug': slug, 'title': title})
+        result[domain] = pages
     return result
