@@ -11,7 +11,7 @@ sources:
 
 ## 배경
 
-파이썬이 AI 에이전트 개발의 기본 언어로 여겨지지만, JVM 생태계도 강력한 대안이 될 수 있다는 주장이 있다. Rod Johnson(Spring Framework 창시자)이 만든 [Embabel](https://github.com/embabel/embabel-agent) 프레임워크와 파이썬 기반 [[langgraph|LangGraph]]를 6가지 에이전트 디자인 패턴으로 비교한 분석이다.
+파이썬이 AI 에이전트 개발의 기본 언어로 여겨지지만, JVM 생태계도 강력한 대안이 될 수 있다는 주장이 있다. Rod Johnson(Spring Framework 창시자)이 만든 [Embabel](https://github.com/embabel/embabel-agent) 프레임워크와 파이썬 기반 [LangGraph](https://github.com/langchain-ai/langgraph)를 6가지 에이전트 디자인 패턴으로 비교한 분석이다.
 
 > Rod Johnson은 Embabel 창시자이므로, 이 비교는 Embabel에 유리한 관점에서 작성되었음을 감안해야 한다.
 
