@@ -1,6 +1,8 @@
 ---
 title: "Artemis II 내결함성 컴퓨터"
-tags: [fault-tolerance, aerospace, embedded-systems, real-time-os, redundancy]
+type: concept
+tags: [cs, fault-tolerance, aerospace, embedded-systems, real-time-os, redundancy]
+maturity: growing
 updated: 2026-04-13
 sources:
   - https://cacm.acm.org/news/how-nasa-built-artemis-iis-fault-tolerant-computer/

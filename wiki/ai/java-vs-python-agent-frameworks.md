@@ -1,6 +1,8 @@
 ---
 title: "자바 vs 파이썬 에이전트 프레임워크 비교"
+type: concept
 tags: [ai, agent, java, python, langgraph, embabel]
+maturity: growing
 updated: 2026-04-16
 sources:
   - https://yozm.wishket.com/magazine/detail/3708/

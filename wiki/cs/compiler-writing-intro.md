@@ -1,6 +1,8 @@
 ---
 title: "컴파일러 작성 입문"
-tags: [programming, compiler, education]
+type: concept
+tags: [cs, compiler, education]
+maturity: growing
 updated: 2026-04-16
 sources:
   - https://prog21.dadgum.com/30.html

@@ -1,6 +1,7 @@
 ---
 title: "트럼프 호르무즈 해협 봉쇄 선언 (2026)"
-tags: [politics, usa, iran, trump, middle-east]
+type: event
+tags: [geopolitics, usa, iran, trump, middle-east]
 updated: 2026-04-13
 sources:
   - https://n.news.naver.com/mnews/article/018/0006255836

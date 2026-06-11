@@ -1,6 +1,8 @@
 ---
 title: "Python 3.13 새 기능"
-tags: [programming, python, release-notes]
+type: concept
+tags: [dev, python, release-notes]
+maturity: growing
 updated: 2026-04-13
 sources:
   - https://docs.python.org/3.13/whatsnew/3.13.html
