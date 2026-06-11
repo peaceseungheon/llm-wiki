@@ -5,7 +5,8 @@ RAG 대신 점진적으로 축적되는 마크다운 위키를 통해 지식을 
 
 ## 위키 구조
 
-- **위키 페이지**: `wiki/programming/`, `wiki/ai/`, `wiki/politics/`, `wiki/_concepts/`
+- **위키 페이지**: `wiki/dev/`, `wiki/cs/`, `wiki/ai/`, `wiki/geopolitics/`, `wiki/military/`, `wiki/_concepts/`
+- **MOC 허브**: 각 도메인 루트의 `{도메인}-moc.md` — 도메인 지식 지도 (숙련도 표시 포함)
 - **미처리 소스**: `sources/inbox/` — Web Clipper가 여기에 저장
 - **처리완료 소스**: `sources/processed/`
 - **색인**: `index.md` — 모든 페이지의 한 줄 요약 목록
@@ -28,7 +29,18 @@ RAG 대신 점진적으로 축적되는 마크다운 위키를 통해 지식을 
 4. 모든 inbox 파일 처리 완료 후:
    - 처리된 파일을 `sources/processed/`로 이동
    - `index.md` 업데이트 (새 페이지 추가 또는 기존 항목 갱신)
+   - **해당 도메인 MOC 업데이트** (새 페이지 링크 + 숙련도 추가, 신규 페이지 기본 maturity는 `seed`)
    - `log.md`에 항목 추가: `## [YYYY-MM-DD] ingest | {변경 요약}`
+
+## "공부한 내용 정리해줘" / "이 내용 위키에 저장해줘" 명령 시
+
+대화에서 배우거나 논의한 내용을 위키 페이지로 변환한다:
+
+1. 대화 내용에서 주제 단위로 지식 추출 (하나의 페이지 = 하나의 주제)
+2. `index.md` 확인 → 기존 페이지가 있으면 업데이트, 없으면 새 페이지 제안
+3. SCHEMA.md 규칙에 따라 페이지 작성 (type은 보통 `concept`, maturity는 사용자에게 확인)
+4. 변경 내용 설명 후 **사용자 승인 대기**
+5. 승인 시: 페이지 쓰기 + `index.md` 갱신 + 해당 도메인 MOC 갱신 + `log.md`에 `## [YYYY-MM-DD] learn | {요약}` 추가
 
 ## "~에 대해 알려줘" / "~찾아줘" / "~검색해줘" 명령 시
 
@@ -57,6 +69,8 @@ RAG 대신 점진적으로 축적되는 마크다운 위키를 통해 지식을 
 3. **빈 지식 영역**: index.md에 항목이 없는 도메인 폴더
 4. **오래된 페이지**: updated 날짜가 6개월 이상 된 페이지 목록
 5. **깨진 링크**: 존재하지 않는 페이지를 참조하는 [[WikiLinks]]
+6. **maturity 분포**: 도메인별 seed/growing/solid 페이지 수 통계
+7. **MOC 불일치**: MOC에 없는 위키 페이지 / MOC가 [[링크]]했지만 존재하지 않는 페이지
 
 ## 위키 페이지 작성 규칙
 
@@ -66,7 +80,8 @@ RAG 대신 점진적으로 축적되는 마크다운 위키를 통해 지식을 
   - 콜론(`:`) → `-`
   - 물음표(`?`) → 제거
   - 나머지 금지 문자(`* " < > |`) → 제거
-- 반드시 YAML 프론트매터 포함: title, tags, updated, sources
+- 반드시 YAML 프론트매터 포함: title, type, tags, maturity(concept/entity만), updated, sources
+- 첫 번째 태그는 도메인명 (dev/cs/ai/geopolitics/military/concepts)
 - Obsidian `[[WikiLinks]]` 적극 활용
 - 사실만 본문에 기록, 의견/추측은 `> 인용 블록`으로 구분
 - 각 페이지는 단일 주제에 집중
